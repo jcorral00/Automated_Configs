@@ -218,7 +218,6 @@ class Management:
                 self._open_link_safely(edit_href)
                 add_new_change_button = self.driver.find_element(By.XPATH, '//p/input[@name="B4"]')
                 add_new_change_button.click()
-                print("HE ENTRADO EN LA CONFIGURACIÓN Y HE PRESIONADO EL BOTÓN DE AÑADIR CAMBIOS")
 
                 # modificamos el campo de la fecha del último cambio a la last_updated de origin:
 
@@ -230,7 +229,7 @@ class Management:
                 input_locator = (By.XPATH, '//form[@id="powermanagementrate"]/fieldset/input[contains(@class, "hasDatepicker")]')
                 # Localizamos el input:
                 last_updated_box = self._wait_visible(*input_locator, timeout=30)
-                print("HE ENCONTRADO EL CAMPO DE FECHA")
+
                 # Al tratarse de un datepicker, muchos son readonly; mejor escribimos con JS:
                 try:
                     self.driver.execute_script("""
@@ -242,13 +241,9 @@ class Management:
                     last_updated_box.clear()
                     last_updated_box.send_keys(last_updated)
 
-                print("HE MODIFICADO EL CAMPO DE LA FECHA DE LA ÚLTIMA ACTUALIZACIÓN")
-
                 # Modificamos los campos de precio de energía y potencia en función de data_config:
                 valid_rows_xpath = "//div[@class='scrollabletable']/table/tbody/tr[not(contains(@style, 'display: none'))]"
                 rows = self.wait.until(EC.presence_of_all_elements_located((By.XPATH, valid_rows_xpath)))
-
-                print("HE ENCONTRADO LAS ROWS VÁLIDAS PARA MODIFICAR SUS CAMPOS")
 
                 energy_list = data_config.get('(precio/unidad energía)', [])
                 power_list = data_config.get('(precio/unidad potencia/día)', [])
